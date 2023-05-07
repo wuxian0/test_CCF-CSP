@@ -20,12 +20,14 @@ int main()
 
     scanf("%d%d%d",&n,&L,&S);
 
+    // 读入数据
     for (int i = 0; i < n; i++)
     {
         scanf("%d%d",&row,&col);
         mapFull[i][0] = row;
         mapFull[i][1] = col;
     }
+    // 排序
     for (int i = 0; i < n; i++ )
     {
         for (int j = i+1; j < n; j++ )
@@ -51,6 +53,7 @@ int main()
         }
     }
 
+    // 写的有点复杂了，用其他方法存储应该更快
     for(int i = 0; i < n; i++)
     {
         if(mapFull[i][0] > L-S || mapFull[i][1] > L-S)
@@ -89,10 +92,6 @@ int main()
     }
 
     printf("%d",count);
-    
-    
-
-
 
     return 0;
 }
