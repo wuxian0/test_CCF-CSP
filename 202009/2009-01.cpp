@@ -54,7 +54,7 @@ A a[210];
         i--;
         
     }
-    std::sort(a+1,a+n,comp);
+    std::sort(a+1,a+n+1,comp);
     for(int i = 1; i <= 3; i++)
     {
         printf("%d\n",a[i].index);
