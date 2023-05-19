@@ -25,7 +25,7 @@ typedef struct
 
 bool startOrder( Teacher a, Teacher b)
 {
-    if(a.end == b.end && a.start < b.start)
+    if(a.start < b.start)
     {
         return true;
     }
@@ -49,19 +49,45 @@ bool endOrder( Teacher a, Teacher b)
     return false;
 }
 
+int posList[1010];
+int N,K;
+int kn,st,last;
+
+Teacher teacher[1010];
+Teacher tcopy[1010];
+
+int tmin;
+int tmax;
+int getKey[1010];
+
+void putKey(int kno)
+{
+    for(int i = 1; i <= N; i++)
+    {
+        if(posList[i] == 0)
+        {
+            posList[i] = kno;
+            // printf("归还钥匙%d，位置:%d\n",kno, i);
+            break;
+        }
+    }
+}
+
+void getKeyy(int kno)
+{
+    for(int i = 1; i <= N; i++)
+    {
+        if(posList[i] == kno)
+        {
+            posList[i] = 0;
+            // printf("获取钥匙%d，位置:%d\n",kno, i);
+            break;
+        }
+    }
+}
 
 int main()
 {
-    int N,K;
-    int kn,st,last;
-
-    Teacher teacher[1010];
-    int posList[1010];
-    int tmin;
-    int tmax;
-    int getKey[1010];
-
-
     scanf("%d%d",&N,&K);
 
     for(int i = 1; i <= K; i++)
@@ -70,47 +96,62 @@ int main()
         teacher[i].keyno = kn;
         teacher[i].start = st;
         teacher[i].end = st+last;
+        tcopy[i] = teacher[i];
     }
-    //
+    // printf("%d %d %d\n",tcopy[1].keyno,tcopy[1].start,tcopy[1].end);
+
     for(int i = 1; i <= N; i++)
     {
         posList[i] = i;
     }
 
-    sort(teacher+1, teacher+K+1, endOrder);
-    tmax = teacher[K].end;
+    sort(tcopy+1, tcopy+K+1, endOrder);
+    tmax = tcopy[K].end;
     sort(teacher+1, teacher+K+1, startOrder);
     tmin = teacher[1].start;
-    
-    
-    for(int i = tmin; i <= max; i++)
-    {
 
+    int it = 1;
+    int itc = 1;
+    int time = 1;
+    while(time <= tmax)
+    {
+        // printf("时间：%d\n",time);
+        for(int i = itc; i <= K; i++)
+        {
+            if(tcopy[i].end == time)
+            {
+                putKey(tcopy[i].keyno);
+                itc = i;
+            }
+            else if(tcopy[i].end > time)
+            {
+                itc = i;
+                break;
+            }
+        }
+
+        for(int i = it; i <= K; i++)
+        {
+            if(teacher[i].start == time)
+            {
+                getKeyy(teacher[i].keyno);
+                it = i;
+            }
+            else if(teacher[i].end > time)
+            {
+                it = i;
+                break;
+            }
+        }
+
+        time++; 
 
     }
-
-    // for(int i = 1; i <= K; i++)
-    // {
-    //     getKey[i] = teacher[i].keyno;
-    // }
-    // for(int i = 1; i <= K; i++)
-    // {
-    //     printf("%d ",getKey[i]);
-    // }
-    // printf("\n");
-
-    // sort(teacher+1, teacher+K+1, endOrder);
-    // for(int i = 1; i <= K; i++)
-    // {
-    //     keyList[getKey[i]] = teacher[i].keyno;
-    //     printf("%d ",teacher[i].keyno);
-
-    // }
-    // printf("\n");
+    
     
     for(int i = 1; i <= N; i++)
     {
-        printf("%d ",keyList[i]);
+        printf("%d ",posList[i]);
     }
 
 	return 0;
