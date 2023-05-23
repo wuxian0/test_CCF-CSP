@@ -1,5 +1,31 @@
 /**
- * 空模版
+ * 俄罗斯方块
+ * 
+ * 100
+ *  ^
+ * / \
+ *  |
+ * 之前判断完重合边界，又从重合边界循环比较
+ * 修改：边界确认后直接复制板块到方格图中
+ * 
+ *  80
+ *  ^
+ * / \
+ *  |
+ * 没有判断:当板块中某一个方块的下边缘与方格图上的方块上边缘重合或者达到下边界时，板块不再移动
+ * 对策：添加了从上向下移动，40 -> 80
+ * 
+ *  40
+ *  ^
+ * / \
+ *  |
+ * 
+ * 板块最下面一行为0是，可以忽略
+ * 对策：将板块中的图像(1)按行下移 20->40
+ * 
+ * 20
+ * 
+ * 
 */
 
 #include<stdio.h>
@@ -49,11 +75,8 @@ int main()
 
 	// 起始行判断，从上向下
 	int downRow = 12;
-	for(int i = 12; i >=0)
-
-	// 判断
 	int flag = 0;
-	for(int i = 1; i <= 12; i++)
+	for(int i = downRow; i > 0; i--)
 	{
 		flag = 1;
 		for(int j = 1; j <= 4; j++)
@@ -63,34 +86,34 @@ int main()
 				if( a[i+j-1][h+left-1] == 1 && b[j][h] == 1)
 				{
 					flag = 0;
-					// printf("%d\n",i);
 					break;
 				}
 			}
 			if(flag == 0)
-			{
-				break;
-			}
+			{break;}
 		}
 		if(flag == 0)
 		{
-			continue;
+			downRow = i+1;
+			break;
 		}
 		else
 		{
-			for(int j = 1; j <= 4; j++)
-			{
-				for(int h = 1; h <= 4; h++)
-				{
-					if( a[i+j-1][h+left-1] == 1 || b[j][h] == 1)
-					{
-						a[i+j-1][h+left-1] = 1;
-					}
-				}
-			}
-			break;
+			downRow = i;
+		}
+
+	}
+
+	// 判断
+
+	for(int i = 1; i <= 4; i++)
+	{
+		for(int j = 1; j <= 4; j++)
+		{
+			a[downRow+i-1][j+left-1] = (a[downRow+i-1][j+left-1] || b[i][j] );
 		}
 	}
+
 	for(int i = 15; i >= 1; i--)
 	{
 		for(int j = 1; j <= 10 ; j++)
@@ -100,6 +123,5 @@ int main()
 		printf("\n");
 	}
 	
-
 	return 0;
 }
